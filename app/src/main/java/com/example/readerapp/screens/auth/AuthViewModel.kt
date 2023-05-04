@@ -3,16 +3,14 @@ package com.example.readerapp.screens.auth
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.readerapp.model.MUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 
 class AuthViewModel : ViewModel() {
@@ -78,15 +76,19 @@ class AuthViewModel : ViewModel() {
             }
         }
 
-    private fun saveUserToDB(email: String, name: String,) {
+    private fun saveUserToDB(email: String, name: String) {
+        val id: String = db.document().id
+        val user = MUser(
+            userId = id,
+            fullName = name,
+            email = email,
+            quote = "",
+            avatar = "",
+            profession = "Mobile Engineer"
+        ).toMap()
 
-        val user = mutableMapOf<String, Any>()
-        user["id"] = db.id
-            user["name"] = name
-        user["email"] = email
 
-        db.add(user)
-
+        db.document(id).set(user)
 
 
     }
