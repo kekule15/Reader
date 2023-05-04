@@ -1,5 +1,6 @@
 package com.example.readerapp.navigation
 
+import com.example.readerapp.screens.SplashScreen
 import java.lang.IllegalArgumentException
 
 enum class ReaderScreens {
