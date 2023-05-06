@@ -1,5 +1,6 @@
 package com.example.readerapp.screens
 
+import android.util.Log
 import android.view.animation.OvershootInterpolator
 import android.widget.Space
 import androidx.compose.animation.core.Animatable
@@ -51,8 +52,10 @@ fun SplashScreen(navController: NavController) {
 
         )
         delay(2000L)
+       // navController.navigate(ReaderScreens.LoginScreen.name)
+        Log.d("Auth", "SplashScreen: check auth status ${FirebaseAuth.getInstance().currentUser}")
         if (
-            FirebaseAuth.getInstance().currentUser?.email!!.isNotEmpty()
+            FirebaseAuth.getInstance().currentUser != null
         ) {
             navController.navigate(ReaderScreens.HomeScreen.name)
         } else {

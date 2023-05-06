@@ -8,6 +8,7 @@ import com.example.readerapp.screens.SplashScreen
 import com.example.readerapp.screens.auth.LoginScreen
 import com.example.readerapp.screens.auth.RegisterScreen
 import com.example.readerapp.screens.home.HomeScreen
+import com.example.readerapp.screens.stats.StatsScreen
 
 @Composable
 fun ReaderNavigation() {
@@ -24,6 +25,10 @@ fun ReaderNavigation() {
         }
         composable(ReaderScreens.RegisterScreen.name) {
             RegisterScreen(navController = navController)
+        }
+
+        composable(ReaderScreens.StatsScreen.name) {
+            StatsScreen(navController = navController)
         }
     }
 }

@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -21,6 +22,14 @@ class AuthViewModel : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
 
     private val db = FirebaseFirestore.getInstance().collection("Users")
+
+    init {
+
+
+    }
+    fun loadData() =  viewModelScope.launch(Dispatchers.IO){
+
+    }
 
     fun login(email: String, password: String, next: () -> Unit = {}) = viewModelScope.launch {
         try {
