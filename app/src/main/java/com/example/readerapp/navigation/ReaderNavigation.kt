@@ -32,6 +32,7 @@ fun ReaderNavigation() {
             StatsScreen(navController = navController)
         }
         composable(ReaderScreens.SearchScreen.name) {
+
             SearchScreen(navController = navController)
         }
     }

@@ -1,5 +1,4 @@
 package com.example.readerapp.screens.auth
-
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,8 +37,10 @@ import com.example.readerapp.components.EmailField
 import com.example.readerapp.components.PasswordField
 import com.example.readerapp.navigation.ReaderScreens
 
+
 @Composable
-fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+fun LoginScreen(navController: NavController = NavController(context = LocalContext.current), authViewModel: AuthViewModel = viewModel()) {
+    val context = LocalContext.current
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,16 +52,15 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = vie
                 isLoading = authViewModel.loading,
             ) { email, password ->
                 Log.d("User Form", "LoginScreen:$email and $password ")
-                authViewModel.login(email = email, password = password) {
+                authViewModel.login(email = email, password = password, context = context) {
                     navController.navigate(ReaderScreens.HomeScreen.name)
                 }
             }
         }
     }
 }
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Preview
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserLoginForm(
     navController: NavController = NavController(context = LocalContext.current),

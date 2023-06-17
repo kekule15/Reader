@@ -69,21 +69,24 @@ fun ListCard(
         ) {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
 
-               Surface( modifier = Modifier
-                   .height(150.dp)
-                   .width(140.dp)
-                   .padding(end = 10.dp),
+                Surface(
+                    modifier = Modifier
+                        .height(150.dp)
+                        .width(140.dp)
+                        .padding(end = 10.dp),
 
-               ) {
-                   AsyncImage(
-                       model = "http://books.google.com/books/content?id=LY1FDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-                       contentDescription = "Book Image",
-                       modifier = Modifier
-                           .fillMaxHeight()
-                           .fillMaxWidth().clip(RoundedCornerShape(topStartPercent = 26)),
-                       contentScale = ContentScale.Crop,
-                   )
-               }
+
+                ) {
+                    AsyncImage(
+                        model = "http://books.google.com/books/content?id=LY1FDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+                        contentDescription = "Book Image",
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(topStartPercent = 26, bottomEndPercent = 24)),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
                 Column(
                     modifier = Modifier.padding(top = 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

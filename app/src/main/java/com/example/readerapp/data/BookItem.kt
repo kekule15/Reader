@@ -1,6 +1,6 @@
 package com.example.readerapp.data
 
-data class Item(
+data class BookItem(
     val accessInfo: AccessInfo,
     val etag: String,
     val id: String,
