@@ -1,7 +1,6 @@
 package com.example.readerapp.screens.home
 
 import android.annotation.SuppressLint
-import android.widget.HorizontalScrollView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +35,7 @@ import androidx.navigation.NavController
 import com.example.readerapp.components.ListCard
 import com.example.readerapp.components.ReaderAppBar
 import com.example.readerapp.components.TitleSection
-import com.example.readerapp.data.BookModel
+import com.example.readerapp.model.BookModel
 import com.example.readerapp.navigation.ReaderScreens
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

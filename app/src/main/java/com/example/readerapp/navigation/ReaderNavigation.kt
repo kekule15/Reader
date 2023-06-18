@@ -1,12 +1,15 @@
 package com.example.readerapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.readerapp.screens.SplashScreen
 import com.example.readerapp.screens.auth.LoginScreen
 import com.example.readerapp.screens.auth.RegisterScreen
+import com.example.readerapp.screens.detail.DetailScreen
 import com.example.readerapp.screens.home.HomeScreen
 import com.example.readerapp.screens.search.SearchScreen
 import com.example.readerapp.screens.stats.StatsScreen
@@ -32,8 +35,16 @@ fun ReaderNavigation() {
             StatsScreen(navController = navController)
         }
         composable(ReaderScreens.SearchScreen.name) {
-
             SearchScreen(navController = navController)
+        }
+        val details = ReaderScreens.DetailsScreen.name
+        composable("$details/{bookId}", arguments = listOf(navArgument("bookId") {
+            type = NavType.StringType
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("bookId").let {
+                DetailScreen(navController = navController, bookId = it!!)
+            }
+
         }
     }
 }

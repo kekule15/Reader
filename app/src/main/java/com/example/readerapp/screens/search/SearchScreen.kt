@@ -3,7 +3,6 @@
 package com.example.readerapp.screens.search
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -37,11 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -49,7 +45,7 @@ import coil.compose.AsyncImage
 import com.example.readerapp.components.CustomTextField
 import com.example.readerapp.components.ReaderAppBar
 import com.example.readerapp.data.BookItem
-import com.example.readerapp.data.BookModel
+import com.example.readerapp.navigation.ReaderScreens
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -105,7 +101,7 @@ fun BookRow(book: BookItem, navController: NavController) {
         "http://books.google.com/books/content?id=LY1FDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
 
     val imageURl =
-        if (book.volumeInfo.imageLinks == null || book.volumeInfo.imageLinks?.smallThumbnail!!.toString()
+        if (book.volumeInfo.imageLinks == null || book.volumeInfo.imageLinks.smallThumbnail
                 .isEmpty()
         )url  else {
 
@@ -113,7 +109,9 @@ fun BookRow(book: BookItem, navController: NavController) {
         }
 
     Card(modifier = Modifier
-        .clickable { }
+        .clickable {
+            navController.navigate(ReaderScreens.DetailsScreen.name + "/${book.id}")
+        }
         .fillMaxWidth()
         .height(100.dp)
         .padding(top = 10.dp),
