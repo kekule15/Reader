@@ -1,9 +1,12 @@
 package com.example.readerapp.screens.detail
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Space
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,8 +40,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.readerapp.components.ReaderAppBar
+import com.example.readerapp.components.RoundedButton
 import com.example.readerapp.data.BookItem
 import com.example.readerapp.data.Resource
+import com.example.readerapp.model.BookModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -90,6 +98,8 @@ fun BookInfoWidget(data: Resource<BookItem>, navController: NavController) {
         HtmlCompat.fromHtml(bookData!!.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
     val deviceHSize = LocalContext.current.resources.displayMetrics
+
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,7 +165,64 @@ fun BookInfoWidget(data: Resource<BookItem>, navController: NavController) {
             }
 
         }
+        Spacer(modifier = Modifier.padding(bottom = 10.dp))
+
+        Row(modifier = Modifier.padding(2.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            val cat: String = if (bookData.categories == null) "N/A" else {
+                bookData.categories.toString()
+            }
+            val book = BookModel(
+                title = bookData.title,
+                authors = bookData.authors.toString(),
+                description = bookData.description,
+                categories = cat,
+                notes = "",
+                photoUrl = bookData.imageLinks?.smallThumbnail,
+                publishedDate = bookData.publishedDate,
+                pageCount = bookData.pageCount.toString(),
+                rating = 0.0,
+                googleBookId = data.data.id,
+                userId = FirebaseAuth.getInstance().currentUser?.uid.toString(),
+
+
+                )
+            RoundedButton(
+                label = "Save"
+            ) {
+                saveBookToDb(book) {
+                    Toast.makeText(
+                        context,
+                        "Book Saved Successfully",
+                        Toast.LENGTH_LONG,
+                    ).show()
+
+                    navController.popBackStack()
+                }
+            }
+            RoundedButton(
+                label = "Cancel"
+            ) {
+                navController.popBackStack()
+            }
+        }
 
 
     }
+}
+
+
+fun saveBookToDb(book: BookModel, next: () -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    val bookCollection = db.collection("books")
+
+    val docId = bookCollection.document().id
+
+    book.id = docId
+    bookCollection.document(docId).set(book).addOnSuccessListener {
+        next()
+    }.addOnFailureListener {
+        Log.d("Book", "saveBookToDb: Error add book to db $it")
+    }
+
+
 }

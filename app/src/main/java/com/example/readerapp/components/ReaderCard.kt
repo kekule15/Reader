@@ -20,6 +20,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,12 +37,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.readerapp.model.BookModel
 
-@Preview
+
 @Composable
 fun ListCard(
-    bookModel: BookModel = BookModel(
-        id = "1", title = "First Book", note = "This is the first book", author = "Augustus"
-    ),
+    bookModel: BookModel,
     onTap: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -51,6 +51,10 @@ fun ListCard(
 
     val spacing = 10.dp
 
+    val isReading = remember {
+        mutableStateOf(false)
+    }
+
     Card(
         shape = RoundedCornerShape(29.dp),
         elevation = 6.dp,
@@ -60,7 +64,7 @@ fun ListCard(
             .padding(start = 0.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
             .height(240.dp)
             .width(210.dp)
-            .clickable { onTap.invoke(bookModel.title) },
+            .clickable { onTap.invoke(bookModel.title.toString()) },
         border = BorderStroke(1.dp, color = Color.LightGray)
     ) {
         Column(
@@ -76,9 +80,9 @@ fun ListCard(
                         .padding(end = 10.dp),
 
 
-                ) {
+                    ) {
                     AsyncImage(
-                        model = "http://books.google.com/books/content?id=LY1FDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+                        model = bookModel.photoUrl,
                         contentDescription = "Book Image",
                         modifier = Modifier
                             .fillMaxHeight()
@@ -102,14 +106,14 @@ fun ListCard(
                 }
             }
             Text(
-                text = "Book title",
+                text = bookModel.title!!,
                 modifier = Modifier.padding(4.dp),
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "Authors: All...",
+                text = "Authors: ${bookModel.authors}",
                 modifier = Modifier.padding(4.dp),
                 style = MaterialTheme.typography.caption
             )
@@ -118,7 +122,8 @@ fun ListCard(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.Bottom,
             ) {
-                RoundedButton(label = "Reading", radius = 70)
+                isReading.value = bookModel.startedReading != null
+                RoundedButton(label = if (isReading.value) "Reading" else "Not yet", radius = 70)
             }
         }
     }

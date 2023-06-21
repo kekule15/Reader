@@ -13,6 +13,7 @@ import com.example.readerapp.screens.detail.DetailScreen
 import com.example.readerapp.screens.home.HomeScreen
 import com.example.readerapp.screens.search.SearchScreen
 import com.example.readerapp.screens.stats.StatsScreen
+import com.example.readerapp.screens.update.UpdateScreen
 
 @Composable
 fun ReaderNavigation() {
@@ -43,6 +44,16 @@ fun ReaderNavigation() {
         })) { backStackEntry ->
             backStackEntry.arguments?.getString("bookId").let {
                 DetailScreen(navController = navController, bookId = it!!)
+            }
+
+        }
+
+        val update = ReaderScreens.UpdateScreen.name
+        composable("$update/{bookId}", arguments = listOf(navArgument("bookId") {
+            type = NavType.StringType
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("bookId").let {
+                UpdateScreen(navController = navController, bookId = it!!)
             }
 
         }
