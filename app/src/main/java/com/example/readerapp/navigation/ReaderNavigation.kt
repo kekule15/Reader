@@ -57,5 +57,8 @@ fun ReaderNavigation() {
             }
 
         }
+        composable(ReaderScreens.StatsScreen.name) {
+            StatsScreen(navController = navController)
+        }
     }
 }

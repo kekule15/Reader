@@ -10,7 +10,10 @@ import com.example.readerapp.repository.FirebaseBookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,22 +28,35 @@ class HomeViewModel @Inject constructor(private val repository: FirebaseBookRepo
     )
 
     init {
-        getAllBooksFromDB()
+        getUser()
+       // getAllBooksFromDB()
     }
 
-     fun getAllBooksFromDB() {
-       viewModelScope.launch {
-           data.value.loading = true
-           data.value = repository.getAllBooksFromDB()
-           if (!data.value.data.isNullOrEmpty()) data.value.loading = false
-       }
+    private fun getAllBooksFromDB() {
+        viewModelScope.launch {
+            data.value.loading = true
+            data.value = repository.getAllBooksFromDB()
+            if (!data.value.data.isNullOrEmpty()) data.value.loading = false
+        }
     }
-    private val uiScope = CoroutineScope(Dispatchers.Main)
 
-    fun launchDataLoad() {
-        uiScope.launch {
-            getAllBooksFromDB() // happens on the background
-            // Modify UI
+    private val moreData = MutableStateFlow<DataOrException<List<BookModel>, Boolean, Exception>>(
+        DataOrException(
+            data = listOf(),
+            true,
+            Exception("")
+        )
+    )
+    val user: StateFlow<DataOrException<List<BookModel>, Boolean, Exception>> get() = moreData
+
+
+    private fun getUser() {
+        viewModelScope.launch {
+
+            repository.getUser().collect { user ->
+                moreData.value = user
+                if (!moreData.value.data.isNullOrEmpty()) moreData.value.loading = false
+            }
         }
     }
 

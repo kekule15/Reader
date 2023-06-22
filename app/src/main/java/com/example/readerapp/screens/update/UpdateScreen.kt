@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -76,7 +78,7 @@ fun UpdateScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     Log.d("Book Google ID", "UpdateScreen: $bookId")
-    Log.d("Book Data", "UpdateScreen: ${viewModel.data.value}")
+    Log.d("Book Data", "UpdateScreen: ${viewModel.user.collectAsState().value}")
     Scaffold(topBar = {
         ReaderAppBar(
             title = "Update Book",
@@ -92,10 +94,10 @@ fun UpdateScreen(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(3.dp)
+                .padding(20.dp)
         ) {
             ShowBookUpdate(
-                bookInfo = viewModel.data.value,
+                bookInfo = viewModel.user.collectAsState().value,
                 bookId = bookId,
                 navController,
                 viewModel
@@ -164,7 +166,7 @@ fun ShowSimpleForm(bookInfo: BookModel, navController: NavController, viewModel:
             notesText.value = note
         }
         Row(
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -264,7 +266,7 @@ fun ShowSimpleForm(bookInfo: BookModel, navController: NavController, viewModel:
 
                                 openDialog.value = false
                                 navController.popBackStack()
-                                viewModel.launchDataLoad()
+
 
                             }
                         }.addOnFailureListener{
@@ -326,9 +328,8 @@ fun SimpleForm(
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
-            .padding(3.dp)
-            .background(Color.Transparent, CircleShape)
-            .padding(horizontal = 20.dp, vertical = 12.dp),
+            .padding(6.dp)
+            .background(Color.Transparent, CircleShape),
         valueState = textFieldValue,
         labelId = "Enter Your thoughts",
         enabled = true,
@@ -346,7 +347,7 @@ fun BookInfoWidget(bookInfo: BookModel) {
         modifier = Modifier
             .padding(3.dp)
             .fillMaxWidth(),
-        shape = CircleShape,
+        shape = RectangleShape,
         elevation = 4.dp
     ) {
         Row {

@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,6 +64,7 @@ fun HomeScreen(
         }
     }
 }
+
 
 @Composable
 fun HomeContent(navController: NavController, viewModel: HomeViewModel) {
@@ -107,8 +109,8 @@ fun HomeContent(navController: NavController, viewModel: HomeViewModel) {
         }
         var currentUser = FirebaseAuth.getInstance().currentUser
         val listOfBooks: List<BookModel>
-        if (!viewModel.data.value.data.isNullOrEmpty()) {
-            listOfBooks = viewModel.data.value.data!!
+        if (!viewModel.user.collectAsState().value.data.isNullOrEmpty()) {
+            listOfBooks = viewModel.user.collectAsState().value.data!!
 
             ReadingNowWidget(books = listOfBooks, navController = navController)
             TitleSection(label = "Reading List")

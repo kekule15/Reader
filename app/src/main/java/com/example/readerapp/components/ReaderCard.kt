@@ -101,7 +101,7 @@ fun ListCard(
                         contentDescription = "Fav Icon",
                         modifier = Modifier.padding(bottom = 1.dp)
                     )
-                    BookRating(score = 3.0)
+                    BookRating(score = bookModel.rating!!.toDouble())
 
                 }
             }
